@@ -1,0 +1,23 @@
+
+<pre *ngIf="error"><mark class="important">{{error}}</mark></pre>
+<table *ngIf="!error">
+    <tr>
+        <th *ngFor="let field of fields">{{field}}</th>
+    </tr>
+    <tr *ngFor="let row of output">
+        <td *ngFor="let field of row">{{field}}</td>
+    </tr>
+</table>
+
+<div class="place b l" [style.maxHeight]="'5em'">
+    <code-editor #editor [(ngModel)]="query"
+                   [style.width]="'30em'"
+                   
+                   [placeholder]="options.placeholder"
+                   [language]="options.language"
+                   [languages]="languages"/>
+</div>
+<div class="place b r">
+<button [style.width]="'8em'" (click)="execQuery()"><h3>&nbsp;EXEC&nbsp;</h3></button><br>
+<button  [style.width]="'8em'" (click)="runQuery()"><h3>&nbsp;RUN&nbsp;</h3></button>
+</div>

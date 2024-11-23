@@ -1,0 +1,100 @@
+<section class="slide" id="cover">
+    <h1>PostgreSQL ako dokumentová databáza v ☝️👆</h1>
+    <footer class="place b r">
+        Marián Vlčák aka vlko, FinStat s.r.o<br>
+        <a href="https://linkedin.com/in/vlko">vlko &#64; LinkedIn</a>
+    </footer>
+</section>
+
+<section class="slide">
+    <h1>Čo je to PostgreSQL?</h1>
+    <ul>
+        <li>objektovo-relačný databázový systém</li>
+        <li>licencia BSD</li>
+        <li>Postgres vývoj začal roku 1982, prototyp 1988, skončil 1993, potom komunitný vývoj a pridaním SQL => PostgreSQL</li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h1>Čo sú to dokumentové databázy?</h1>
+    <ul>
+        <li>Na rozdiel od RDBMS <small>(relational database management system)</small> ukladajú objekty bez schémy</li>
+        <li>funkcionalita: pridať/zmeniť/mazať podľa kľúča</li>
+        <li>dáta ukladané ako XML, JSON, binárne, YAML</li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h1>➕ a ➖ dokumentových DB</h1>
+    <ul>
+        <li>➕ Schema-less</li>
+        <li>➕ Rýchle</li>
+        <li>➕/➖ Škálovateľné</li>
+        <li>➖ filter => index</li>
+        <li>➖ design/developers</li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h1>FinStat a dokumentové DB</h1>
+    <img class="place r b" width="200em" height="200em" src="/images/RavenDB.png" />
+    <ul>
+        <li>Primárne RavenDB</li>
+        <li>Od začiatku postavené dokumentovou mentalitou</li>
+        <li>Využívame aj iné DB (SQLite, MSSql, PostgreSQL)</li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h2 class="shout shrink">Prečo sa teda FinStat vŕta v PostgreSQL?</h2>
+</section>
+
+<section class="slide">
+    <h2 class="shout shrink">$$ MONEY $$</h2>
+</section>
+
+<section class="slide">
+    <h1>Vieme to lepšie/lacnejšie?</h1>
+    <ul>
+        <li>2019 research alternatíva RavenDB pre nový EU projekt</li>
+        <li>CosmosDB</li>
+        <li>RavenDB</li>
+        <li>ElasticSearch</li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h1>Idea</h1>
+    <ul>
+        <li>2019 research pre persisteciu dát projektu meta.finstat</li>
+        <li>Schema-less data s typovým wrapperom</li>
+        <li>CosmosDB</li>
+        <li>PostgreSQL</li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h2 class="shout shrink">PostgreSQL<br> JSONB<br>🏆</h2>
+</section>
+
+
+<section class="slide">
+    <h1>PostgreSQL JSON podpora</h1>
+    <ul>
+        <li>Store type: json, jsonb</li>
+        <li>Index: GIN (jdoc) vs (jdoc jsonb_path_ops)</li>
+        <li>Query: jsonpath</li>
+    </ul>
+</section>
+
+<section class="slide">
+    <h2 class="shout shrink">DEMO</h2>
+</section>
+
+<section class="slide"  [style.overflow]="'auto'">
+    <div class="place t r">
+        <button (click)="generateDefinition()">Definition</button>
+        <button (click)="generateBooksInsert()">Data</button>
+    </div>
+    <app-postgresql-window [query]="query"></app-postgresql-window>
+</section>
