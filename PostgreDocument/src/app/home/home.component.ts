@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit {
   title = 'PostgreDocument';
   public query: string;
   constructor(){
-    this.query = "select 'Hello world' as message;";
+    this.query = "select 'Hello CodeCon' as message;";
   }
   ngOnInit() {
     (<any>window).contentLoaded();
@@ -30,8 +30,7 @@ export class HomeComponent implements OnInit {
     id     SERIAL PRIMARY KEY,
     title  VARCHAR(500) NOT NULL,
     data   JSONB  
-  )
-    `;
+  )`;
   }
   generateBooksInsert() {
     var query = "";

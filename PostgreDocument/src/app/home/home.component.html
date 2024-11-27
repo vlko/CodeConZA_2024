@@ -21,9 +21,9 @@
     <h1>Čo sa dozviete</h1>
     <ul>
         <li>Úplne základy a motiváciu pre prednášku</li>
-        <li>Čo je PostgreSQL JSONB</li>
-        <li>Ako sa JSONB queryuje</li>
-        <li>Zbytočnosti do 45 minút</li>
+        <li>Čo je PostgreSQL JSONB a ako sa to queryuje</li>
+        <li>Ako to vylepšiť</li>
+        <li>Ostatnú vatu na 45 minút</li>
     </ul>
 </section>
 
@@ -85,8 +85,8 @@
     <img class="place r b" width="200em" height="200em" src="/images/RavenDB.png" />
     <ul>
         <li>Primárne RavenDB</li>
-        <li>Od začiatku postavené dokumentovou mentalitou</li>
-        <li>Využívame aj iné DB (SQLite, MSSql, PostgreSQL)</li>
+        <li>Od začiatku postavené "dokumentovou mentalitou"</li>
+        <li>"In production" aj iné DB (SQLite, MSSql, PostgreSQL)</li>
     </ul>
 </section>
 
@@ -101,7 +101,7 @@
 <section class="slide">
     <h1>Vieme to lepšie/lacnejšie?</h1>
     <ul>
-        <li>2019 research alternatíva RavenDB pre nový EU projekt</li>
+        <li>2019 research: alternatíva RavenDB pre nový EU projekt</li>
         <li>CosmosDB</li>
         <li>RavenDB</li>
         <li>ElasticSearch</li>
@@ -109,9 +109,9 @@
 </section>
 
 <section class="slide">
-    <h1>Idea</h1>
+    <h1>Following Idea</h1>
     <ul>
-        <li>2019 research pre persisteciu dát projektu meta.finstat</li>
+        <li>2019 research: persistecia dát projektu meta.finstat</li>
         <li>Schema-less data s typovým wrapperom</li>
         <li>CosmosDB</li>
         <li>PostgreSQL</li>
@@ -128,7 +128,7 @@
     <ul>
         <li>Store type: json, jsonb</li>
         <li>Index: GIN (jdoc) vs (jdoc jsonb_path_ops)</li>
-        <li>Query: jsonpath</li>
+        <li>Query: jsonpath, jsonb_to_record</li>
         <li>A hlavne <strong>"schema free"</strong></li>
     </ul>
 </section>
@@ -167,6 +167,8 @@ values (
 <section class="slide"  [style.overflow]="'auto'">
     <div class="place t"><h2>Table querying</h2></div>
     <div class="place t r simple-line" >
+        <button (click)="generateQuery('select count(*) from books')">Count</button><br>
+        <button (click)="generateQuery('select title,\n  data->\'categs\' as categs, data->\'pageCount\'\n  from books')">Simple query</button><br>
         <button (click)="generateQuery('select title, d.* from books,
   LATERAL jsonb_to_record(data)
   d(categs text[], &quot;pageCount&quot; integer, isbn text)')">Select query</button><br>
@@ -176,7 +178,6 @@ values (
   where &quot;pageCount&quot; &gt; 10
   order by &quot;pageCount&quot; desc')">Count filter</button><br>
         <button (click)="generateMoreBooksInsert()">More Data</button><br>
-        <button (click)="generateQuery('select count(*) from books')">Count</button><br>
     </div>
     <app-postgresql-window [query]="query"></app-postgresql-window>
 </section>
@@ -222,10 +223,12 @@ values (
 
 
 <section class="slide">
-    <h2 class="shout shrink">Toľko odo mňa.<br>Ostatné je už na vás.</h2>
+    <h2 class="shout shrink">Toľko odo mňa.<br>Inšpirujte sa.</h2>
 </section>
 
 <section class="slide">
     <h1>Odkazy</h1>
-    <img class="place" width="200em" height="200em" src="/images/shower.png" />
+    <img class="place" width="300em" height="300em" src="/images/src_github.png" />
+    <img class="place r b" width="200em" height="200em" src="/images/pglite.png" />
+    <img class="place l b" width="200em" height="200em" src="/images/vlko_bluesky.png" />
 </section>
