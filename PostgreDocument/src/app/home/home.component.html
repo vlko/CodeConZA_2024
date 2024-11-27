@@ -1,9 +1,54 @@
 <section class="slide" id="cover">
-    <h1>PostgreSQL ako dokumentová databáza v ☝️👆</h1>
+    <h1>PostgreSQL ako dokumentová databáza (aj v prehliadači)</h1>
     <footer class="place b r">
         Marián Vlčák aka vlko, FinStat s.r.o<br>
-        <a href="https://linkedin.com/in/vlko">vlko &#64; LinkedIn</a>
+        <a href="https://linkedin.com/in/vlko">&#64;vlkodotnet</a>
     </footer>
+</section>
+
+<section class="slide">
+    <h1>Kto je vlko?</h1>
+    <ul>
+        <li>Marián Vlčák</li>
+        <li>naivný amatérsky blogger a technologický nadšenec</li>
+        <li>CTO vo FinStat</li>
+        <li>komunitne zaangažovaný: WebUP, vyvojari.dev</li>
+    </ul>
+    <img class="place r b" width="200em" height="200em" src="/images/vlko-linkedin.png" />
+</section>
+
+<section class="slide">
+    <h1>Čo sa dozviete</h1>
+    <ul>
+        <li>Úplne základy a motiváciu pre prednášku</li>
+        <li>Čo je PostgreSQL JSONB</li>
+        <li>Ako sa JSONB queryuje</li>
+        <li>Zbytočnosti do 45 minút</li>
+    </ul>
+</section>
+
+<section class="slide">
+    <div class="shout shrink">
+        <img  width="400em" height="400em" src="/images/register_speach.jpg" />
+    </div>
+</section>
+
+<section class="slide">
+    <div class="shout shrink">
+        <img  width="400em" height="400em" src="/images/panic.webp" />
+    </div>
+</section>
+
+<section class="slide">
+    <h1>Vsuvka č. 1</h1>
+    <ul>
+        <li>0 % AI, 5 % kódu, 95 % libiek</li>
+        <li><s>C# WASM Blazor</s></li>
+        <li>Angular</li>
+        <li>Shower Presentation Template</li>
+        <li>Linka na zdroják až na konci prednášky</li>
+    </ul>
+    <img class="place r b" width="200em" height="200em" src="/images/shower.png" />
 </section>
 
 <section class="slide">
@@ -84,6 +129,7 @@
         <li>Store type: json, jsonb</li>
         <li>Index: GIN (jdoc) vs (jdoc jsonb_path_ops)</li>
         <li>Query: jsonpath</li>
+        <li>A hlavne <strong>"schema free"</strong></li>
     </ul>
 </section>
 
@@ -91,10 +137,95 @@
     <h2 class="shout shrink">DEMO</h2>
 </section>
 
+<section class="slide">
+    <h1>Vsuvka č. 2 - PGLite</h1>
+    <ul>
+        <li>WASM PostgreSQL</li>
+        <li>Vo vašom prehliadači</li>
+        <li><img  width="600em" src="/images/jsuchal_why.png" /></li>
+    </ul>
+    <img class="place r b" width="200em" height="200em" src="/images/pglite.png" />
+</section>
+
 <section class="slide"  [style.overflow]="'auto'">
-    <div class="place t r">
-        <button (click)="generateDefinition()">Definition</button>
+    <div class="place t"><h2>Table design</h2></div>
+    <div class="place t r simple-line" >
+        <button (click)="generateDefinition()">Definition</button><br>
+        <button (click)="generateQuery('insert into books (title, data)
+values (
+  \'vlko a postgresql\', 
+  \'{
+    &quot;room&quot;:&quot;Scheidt &amp; Bachmann STAGE&quot;,
+    &quot;people&quot;: 10
+  }\'
+)')">Single item</button><br>
         <button (click)="generateBooksInsert()">Data</button>
     </div>
     <app-postgresql-window [query]="query"></app-postgresql-window>
+</section>
+
+<section class="slide"  [style.overflow]="'auto'">
+    <div class="place t"><h2>Table querying</h2></div>
+    <div class="place t r simple-line" >
+        <button (click)="generateQuery('select title, d.* from books,
+  LATERAL jsonb_to_record(data)
+  d(categs text[], &quot;pageCount&quot; integer, isbn text)')">Select query</button><br>
+        <button (click)="generateQuery('select title, d.* from books,  LATERAL jsonb_to_record(data) d(categs text[], &quot;pageCount&quot; integer, isbn text)
+  where \'Open Source\' = any (categs)')">Categ filter</button><br>
+        <button (click)="generateQuery('select title, d.* from books,  LATERAL jsonb_to_record(data) d(categs text[], &quot;pageCount&quot; integer, isbn text)
+  where &quot;pageCount&quot; &gt; 10
+  order by &quot;pageCount&quot; desc')">Count filter</button><br>
+        <button (click)="generateMoreBooksInsert()">More Data</button><br>
+        <button (click)="generateQuery('select count(*) from books')">Count</button><br>
+    </div>
+    <app-postgresql-window [query]="query"></app-postgresql-window>
+</section>
+
+<section class="slide"  [style.overflow]="'auto'">
+    <div class="place t"><h2>Efficient table querying</h2></div>
+    <div class="place t r simple-line" >
+        <button (click)="generateQuery('CREATE INDEX JsonDataFieldsIndex\n  ON books\n  USING gin (Data);\nCREATE INDEX JsonDataIndex\n  ON books\n  USING gin (Data jsonb_path_ops);')">Create Index</button><br>
+        <button (click)="generateQuery('select title,
+  data->\'room\' as room, data->\'people\' as people from books
+  where data ? \'room\'')">Field filter</button><br>
+        <button (click)="generateQuery('select title, d.* from books, LATERAL jsonb_to_record(data) d(categs text[], &quot;pageCount&quot; integer, isbn text)
+  where data @&gt; \'{&quot;categs&quot;: [&quot;PowerBuilder&quot;]}\'')">Categ filter</button><br>
+        <button (click)="generateQuery('select title, d.* from books, LATERAL jsonb_to_record(data) d(categs text[], &quot;pageCount&quot; integer, isbn text)
+  where data @&gt; \'{&quot;pageCount&quot;: 0}\'')">Pages filter</button><br>
+        <button (click)="generateQuery('select title, d.* from books, LATERAL jsonb_to_record(data) d(categs text[], &quot;pageCount&quot; integer, isbn text)
+  order by data->\'pageCount\' desc')">Order by filter</button><br>
+    </div>
+    <app-postgresql-window [query]="query"></app-postgresql-window>
+</section>
+
+<section class="slide"  [style.overflow]="'auto'">
+    <div class="place t"><h2>Materialized view</h2></div>
+    <div class="place t r simple-line" >
+        <button (click)="generateDefinition()">Definition</button><br>
+        <button (click)="generateBooksInsert()">Data</button><br>
+        <button (click)="generateQuery('CREATE MATERIALIZED VIEW books_data AS
+  SELECT id, d.*
+  FROM books, LATERAL jsonb_to_record(data) d(categs text[], &quot;pageCount&quot; integer, isbn text)')">Data view</button><br>
+        <button (click)="generateQuery('select * from books_data')">select data</button><br>
+        <button (click)="generateQuery('CREATE MATERIALIZED VIEW categ_groups AS
+  SELECT 
+        unnest(d.categs) categ,
+        count(id) categItems
+  FROM books, LATERAL jsonb_to_record(data) d(categs text[])
+  GROUP BY categ')">Agg. view</button><br>
+        <button (click)="generateQuery('select * from categ_groups')">select agg.</button><br>
+        <button (click)="generateMoreBooksInsert()">More Data</button><br>
+        <button (click)="generateQuery('REFRESH MATERIALIZED VIEW books_data;\nREFRESH MATERIALIZED VIEW categ_groups;')">Refresh</button><br>
+    </div>
+    <app-postgresql-window [query]="query"></app-postgresql-window>
+</section>
+
+
+<section class="slide">
+    <h2 class="shout shrink">Toľko odo mňa.<br>Ostatné je už na vás.</h2>
+</section>
+
+<section class="slide">
+    <h1>Odkazy</h1>
+    <img class="place" width="200em" height="200em" src="/images/shower.png" />
 </section>

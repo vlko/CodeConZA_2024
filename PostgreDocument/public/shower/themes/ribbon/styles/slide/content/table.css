@@ -16,6 +16,9 @@
 .slide td {
     padding-top: 0;
     padding-bottom: 0;
+    text-overflow: clip;
+    white-space: nowrap;
+    max-width: 200em;
 }
 
 .slide th {

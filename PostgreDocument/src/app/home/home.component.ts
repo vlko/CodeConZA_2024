@@ -20,9 +20,12 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     (<any>window).contentLoaded();
   }
+  generateQuery(query: string) {
+    this.query = query;
+  }
   generateDefinition() {
-    this.query =`
-  create table books
+    this.query =
+  `create table books
   (
     id     SERIAL PRIMARY KEY,
     title  VARCHAR(500) NOT NULL,
@@ -41,9 +44,29 @@ export class HomeComponent implements OnInit {
         longDescription: book.longDescription,
         published: book.publishedDate,
         authors: book.authors,
+        categs: book.categories,
         thumbnail: book.thumbnailUrl
       }
-      query += `insert into books (title, data) values ('${this.escape_string(book.title)}', '${this.escape_string(JSON.stringify(bookData))}'  );\n`;
+      query += `insert into books (title, data) values (\n  '${this.escape_string(book.title)}',\n  '${this.escape_string(JSON.stringify(bookData))}'  );\n`;
+    }
+    this.query = query;
+  }
+  generateMoreBooksInsert() {
+    var query = "";
+    for (var i = 0; i < 10; i++) {
+      for (var book of books)
+      {
+        var bookData = {
+          isbn: i + "-" + book.isbn,
+          pageCount: book.pageCount,
+          shortDescription: "[" + i + "] " + book.shortDescription,
+          longDescription: "[" + i + "] " + book.longDescription,
+          authors: book.authors,
+          categs: book.categories,
+          thumbnail: book.thumbnailUrl
+        }
+        query += `insert into books (title, data) values ('${this.escape_string("[" + i + "] " + book.title)}', '${this.escape_string(JSON.stringify(bookData))}'  );\n`;
+      }
     }
     this.query = query;
   }

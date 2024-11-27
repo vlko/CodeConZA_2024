@@ -1,11 +1,14 @@
 
-<pre *ngIf="error"><mark class="important">{{error}}</mark></pre>
+<pre *ngIf="error"><code *ngFor="let line of error"><mark class="important">{{line}}</mark></code></pre>
 <table *ngIf="!error">
     <tr>
         <th *ngFor="let field of fields">{{field}}</th>
     </tr>
     <tr *ngFor="let row of output">
         <td *ngFor="let field of row">{{field}}</td>
+    </tr>
+    <tr *ngIf="moreResults">
+        <td [attr.colspan]="fields.length"><strong>.. and {{moreResults}} more ..</strong></td>
     </tr>
 </table>
 
@@ -17,7 +20,8 @@
                    [language]="options.language"
                    [languages]="languages"/>
 </div>
-<div class="place b r">
-<button [style.width]="'8em'" (click)="execQuery()"><h3>&nbsp;EXEC&nbsp;</h3></button><br>
-<button  [style.width]="'8em'" (click)="runQuery()"><h3>&nbsp;RUN&nbsp;</h3></button>
+<div class="place b r simple-line">
+    <button [style.width]="'8em'" (click)="execQuery()"><h4>&nbsp;EXEC&nbsp;</h4></button><br>
+    <button [style.width]="'8em'" (click)="runQuery()"><h3>&nbsp;RUN&nbsp;</h3></button><br>
+    <button [style.width]="'8em'" (click)="clearScreen()"><h3>&nbsp;CLS&nbsp;</h3></button>
 </div>

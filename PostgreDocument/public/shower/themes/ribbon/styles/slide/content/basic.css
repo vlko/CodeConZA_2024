@@ -24,3 +24,7 @@
 .slide figure {
     margin: 0;
 }
+
+.slide .simple-line {
+    line-height: 1ex;
+}
